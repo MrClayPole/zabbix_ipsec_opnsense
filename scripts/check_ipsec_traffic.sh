@@ -35,7 +35,7 @@ getTraffic() {
 	if [ $tmp -eq 0 ]; then
 		ipsec status | grep -e "$CONN" | grep -e "ESTABLISHED" > /dev/null 2>&1
 		if [ $? -eq 0 ]; then
-			ipsec statusall | grep -e "$CONN" | grep -v "ESTABLISHED" | grep -E "$IPV4_REGEX" | grep -e "bytes" | grep -e "pkts" > /dev/null 2>&1
+			ipsec statusall | grep -e "$CONN" | grep -v "ESTABLISHED" | grep -e "bytes" | > /dev/null 2>&1
 
 			#If tunnel is up and match IP REGEX
 			if [ $? -eq 0 ]; then
@@ -45,16 +45,8 @@ getTraffic() {
 						echo $bytesIn
 						;;
 					bytesOut)
-						bytesOut=$(ipsec statusall | grep -e "$CONN{" | grep bytes_i | awk -F" " {'print $9'} | tail -1)
+						bytesOut=$(ipsec statusall | grep -e "$CONN{" | grep bytes_i | awk -F" " {'print $5'} | tail -1)
 						echo $bytesOut
-						;;
-					pktsIn)
-						pktsIn=$(ipsec statusall | grep -e "$CONN{" | grep bytes_i | awk -F" " {'print $5'} | sed s/\(// | tail -1) 
-						echo $pktsIn
-						;;
-					pktsOut)
-						pktsOut=$(ipsec statusall | grep -e "$CONN{" | grep bytes_i | awk -F" " {'print $11'} | sed s/\(// | tail -1) 
-						echo $pktsOut
 						;;
 						
 					*)
