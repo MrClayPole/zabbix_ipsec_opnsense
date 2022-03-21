@@ -9,8 +9,8 @@
     </groups>
     <templates>
         <template>
-            <template>Pfsense IPSec tunnels</template>
-            <name>Pfsense IPSec tunnels</name>
+            <template>OPNsense IPSec tunnels</template>
+            <name>OPNsense IPSec tunnels</name>
             <description/>
             <groups>
                 <group>
