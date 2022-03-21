@@ -1,11 +1,11 @@
-#!/usr/local/bin/python2.7
+#!/usr/local/bin/python3
 
 import itertools
 import re
 import sys
 import xml.etree.cElementTree as ET
 
-IPSEC_CONF = '/var/etc/ipsec/ipsec.conf'
+IPSEC_CONF = '/usr/local/etc/ipsec.conf'
 PFSENSE_CONF = '/conf/config.xml'
 rtt_time_warn = 200
 rtt_time_error = 300
