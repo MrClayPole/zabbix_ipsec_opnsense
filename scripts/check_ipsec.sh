@@ -30,25 +30,29 @@ test_tunnel() {
 
     CONN="$1"
     if [ "$STRONG" -eq "1" ]; then
-	#check if tunel exists
-	ipsec statusall | grep -e "$CONN" > /dev/null 2>&1
-	#Save the retuned status code
-	tmp=$?
-	#If tunnel exists
-	if [ $tmp -eq 0 ]; then
-		ipsec statusall | grep -e "$CONN" | grep -i "rekeying" > /dev/null 2>&1
-		if [ $? -eq 0 ]; then
-			ipsec statusall | grep -e "$CONN" | grep -v "rekeying" | grep -E "$IPV4_REGEX" > /dev/null 2>&1
+        #check if tunel exists
+        ipsec statusall 2>&1 | grep -e "$CONN" > /dev/null 2>&1
+        #Save the retuned status code
+        tmp=$?
+        #If tunnel exists
+        if [ $tmp -eq 0 ]; then
+                ipsec statusall | grep -e "$CONN" | grep -i "rekeying" > /dev/null 2>&1
+                if [ $? -eq 0 ]; then
+                        ipsec statusall | grep -e "$CONN" | grep -v "rekeying" | grep -E "$IPV4_REGEX" > /dev/null 2>&1
 
-			#If tunnel is up and match IP REGEX
-			if [ $? -eq 0 ]; then
-                    		#echo "Tunnel $CONN look ok"
-                    		return 0
-                	fi
-            	else
-                	#echo "Tunnel $CONN not ESTABLISHED"
-               		return 1
-            	fi
+                        #If tunnel is up and match IP REGEX
+                        if [ $? -eq 0 ]; then
+                                #echo "Tunnel $CONN look ok"
+                                return 0
+                        fi
+                else
+                        #echo "Tunnel $CONN not ESTABLISHED"
+                        return 1
+                fi
+        else
+                #echo "Tunnel $CONN does not EXISTS"
+                return 1
+
         fi
     fi
 
