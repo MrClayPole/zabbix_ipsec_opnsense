@@ -17,15 +17,13 @@ root = tree.getroot()
 #Function to find phase description by ikeid
 def findDescr(ikeid):
 
-#    search = "./ipsec/phase2/remoteid/[address='" + remoteid + "']..."
     search = "./ipsec/phase1/[ikeid='" + ikeid + "']."
+
 
     for tunnel in root.findall(search):
         descr = tunnel.find('descr').text
 
-        #If we have only one result, we are talking about the correct tunnel
-        if len(root.findall(search)) == 1:
-            return descr
+        return descr
 
     return "Not found"
 
@@ -43,14 +41,12 @@ def formatIkeId(ikeid):
         #Else, get only the position 3. That is because some ikeids are small
         ikeid = ikeid[3]
 
-    # print ("The correct ike id is ", ikeid)
     return ikeid
 
 def parseConf():
     reg_conn = re.compile('^conn\s((?!%default).*)')
     reg_left = re.compile('.*leftid =(.*).*')
     reg_right = re.compile('.*rightid =(.*).*')
-    reg_rightsubnet = re.compile('.*rightsubnet =(.*).*')
     data = {}
 
     with open(IPSEC_CONF, 'r') as f:
@@ -60,17 +56,10 @@ def parseConf():
                 conn_tmp = [m.group(1) for l in conn_info for m in [reg_conn.search(l)] if m]
                 left_tmp = [m.group(1) for l in conn_info for m in [reg_left.search(l)] if m]
                 right_tmp = [m.group(1) for l in conn_info for m in [reg_right.search(l)] if m]
-                rightsubnet_tmp = [m.group(1) for l in conn_info for m in [reg_rightsubnet.search(l)] if m]
                 if len(conn_tmp) > 0 :
-                    if len(rightsubnet_tmp):
-                        rightsubnet_tmp = rightsubnet_tmp[0].lstrip() #remore spaces
-                        rightsubnet_tmp = rightsubnet_tmp.split("/") #Split string to get only ip, without subnet mask)
-#                        descr = findDescr(rightsubnet_tmp[0],formatIkeId(conn_tmp))
-                        descr = findDescr(formatIkeId(conn_tmp))
-                    else:
-                        rightsubnet_tmp.append("Not found")
+                    descr = findDescr(formatIkeId(conn_tmp))
                 else:
-                        descr = "Not found"
+                    descr = "Not found"
                 if conn_tmp and left_tmp and right_tmp:
                     data[conn_tmp[0]] = [left_tmp[0], right_tmp[0], descr]
     return data
