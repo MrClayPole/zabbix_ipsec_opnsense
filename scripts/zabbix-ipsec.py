@@ -1,3 +1,12 @@
+{
+    "data":[
+        { "{#TUNNEL}":"con1","{#TARGETIP}":" 185.113.16.60","{#SOURCEIP}":" 185.113.19.164","{#DESCRIPTION}":"DM00 ELA FIM VPN" },
+        { "{#TUNNEL}":"con2","{#TARGETIP}":" 185.113.16.116","{#SOURCEIP}":" 185.113.19.164","{#DESCRIPTION}":"K3Tenant vCenter VPN" },
+        { "{#TUNNEL}":"con3","{#TARGETIP}":" 185.113.16.212","{#SOURCEIP}":" 185.113.19.164","{#DESCRIPTION}":"K3BTG vCenter VPN" },
+        { "{#TUNNEL}":"con4","{#TARGETIP}":" 1.1.1.2","{#SOURCEIP}":" 185.113.19.162","{#DESCRIPTION}":"K3BTG vCenter VPN" }
+    ]
+}
+root@E6-00-FW01:~ # cat temp.py
 #!/usr/local/bin/python3
 
 import itertools
@@ -15,15 +24,10 @@ tree = ET.parse(PFSENSE_CONF)
 root = tree.getroot()
 
 #Function to find phase description by ikeid
-def findDescr(remoteid,ikeid):
+def findDescr(ikeid):
 
-    #Check if the parameter was sent
-    if not remoteid:
-        return "Not found"
-
-    #create search string. We use the "..." after the search to return the parent element of the current element.
-    #The reason for that is the remoteid is a sub element of phase2 element 
-    search = "./ipsec/phase2/remoteid/[address='" + remoteid + "']..."
+#    search = "./ipsec/phase2/remoteid/[address='" + remoteid + "']..."
+    search = "./ipsec/phase1/[ikeid='" + ikeid + "']."
 
     for tunnel in root.findall(search):
         descr = tunnel.find('descr').text
@@ -32,20 +36,13 @@ def findDescr(remoteid,ikeid):
         if len(root.findall(search)) == 1:
             return descr
 
-        #otherwise, if we have more than 1, we have to confirm the remoteid and the ikeid 
-        #Case the ikeIds are the same, we got it. Case not, we pass and wait for next interation
-        else:
-            #Get the ikeid of this element
-            ikeidElement = tunnel.find('ikeid').text
-            if ikeidElement == ikeid:
-                return descr
-
     return "Not found"
 
 #Function to set correct format on ikeId. Recives conIDXXX, return ID
 def formatIkeId(ikeid):
-	
+
     #Convert list  into a string
+
     ikeid = ikeid[0]
 
     #If ikeid has 8 or more positions, get the position 3 and 4
@@ -55,7 +52,7 @@ def formatIkeId(ikeid):
         #Else, get only the position 3. That is because some ikeids are small
         ikeid = ikeid[3]
 
-    #print "The correct ike id is ", ikeid
+    # print ("The correct ike id is ", ikeid)
     return ikeid
 
 def parseConf():
@@ -64,6 +61,7 @@ def parseConf():
     reg_right = re.compile('.*rightid =(.*).*')
     reg_rightsubnet = re.compile('.*rightsubnet =(.*).*')
     data = {}
+
     with open(IPSEC_CONF, 'r') as f:
         for key, group in itertools.groupby(f, lambda line: line.startswith('\n')):
             if not key:
@@ -76,7 +74,8 @@ def parseConf():
                     if len(rightsubnet_tmp):
                         rightsubnet_tmp = rightsubnet_tmp[0].lstrip() #remore spaces
                         rightsubnet_tmp = rightsubnet_tmp.split("/") #Split string to get only ip, without subnet mask)
-                        descr = findDescr(rightsubnet_tmp[0],formatIkeId(conn_tmp))
+#                        descr = findDescr(rightsubnet_tmp[0],formatIkeId(conn_tmp))
+                        descr = findDescr(formatIkeId(conn_tmp))
                     else:
                         rightsubnet_tmp.append("Not found")
                 else:
