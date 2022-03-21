@@ -1,12 +1,3 @@
-{
-    "data":[
-        { "{#TUNNEL}":"con1","{#TARGETIP}":" 185.113.16.60","{#SOURCEIP}":" 185.113.19.164","{#DESCRIPTION}":"DM00 ELA FIM VPN" },
-        { "{#TUNNEL}":"con2","{#TARGETIP}":" 185.113.16.116","{#SOURCEIP}":" 185.113.19.164","{#DESCRIPTION}":"K3Tenant vCenter VPN" },
-        { "{#TUNNEL}":"con3","{#TARGETIP}":" 185.113.16.212","{#SOURCEIP}":" 185.113.19.164","{#DESCRIPTION}":"K3BTG vCenter VPN" },
-        { "{#TUNNEL}":"con4","{#TARGETIP}":" 1.1.1.2","{#SOURCEIP}":" 185.113.19.162","{#DESCRIPTION}":"K3BTG vCenter VPN" }
-    ]
-}
-root@E6-00-FW01:~ # cat temp.py
 #!/usr/local/bin/python3
 
 import itertools
