@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.0</version>
+    <date>2022-03-22T13:46:55Z</date>
+    <groups>
+        <group>
+            <name>Firewalls</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>OPNsense IPSec tunnels</template>
+            <name>OPNsense IPSec tunnels</name>
+            <groups>
+                <group>
+                    <name>Firewalls</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>IPSec</name>
+                </application>
+                <application>
+                    <name>OPNsense</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>OPNsense Carp/High Available status</name>
+                    <key>carp.status</key>
+                    <history>0</history>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <applications>
+                        <application>
+                            <name>OPNsense</name>
+                        </application>
+                    </applications>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>IPSec Tunnel Discovery</name>
+                    <key>ipsec.discover</key>
+                    <delay>120</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Bytes IN: {#DESCRIPTION} -  {#TUNNEL}</name>
+                            <key>ipsec.traffic[{#TUNNEL},&quot;bytesIn&quot;]</key>
+                            <delay>120</delay>
+                            <history>30d</history>
+                            <trends>90d</trends>
+                            <units>bytes</units>
+                            <applications>
+                                <application>
+                                    <name>IPSec</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Bytes OUT: {#DESCRIPTION} -  {#TUNNEL}</name>
+                            <key>ipsec.traffic[{#TUNNEL},&quot;bytesOut&quot;]</key>
+                            <delay>120</delay>
+                            <history>30d</history>
+                            <trends>90d</trends>
+                            <units>bytes</units>
+                            <applications>
+                                <application>
+                                    <name>IPSec</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Tunnel: {#DESCRIPTION} - {#TUNNEL}</name>
+                            <key>ipsec.tunnel[{#TUNNEL}]</key>
+                            <delay>120</delay>
+                            <history>30d</history>
+                            <trends>90d</trends>
+                            <applications>
+                                <application>
+                                    <name>IPSec</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                    </item_prototypes>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <expression>{OPNsense IPSec tunnels:ipsec.tunnel[{#TUNNEL}].last(0)}&lt;&gt;0 and {OPNsense IPSec tunnels:carp.status.last()}&lt;&gt;&quot;BACKUP&quot;</expression>
+                            <name>Tunnel: {#DESCRIPTION} - {#TUNNEL}  down</name>
+                            <priority>HIGH</priority>
+                            <tags>
+                                <tag>
+                                    <tag>tunnel_name</tag>
+                                    <value>{#TUNNEL}</value>
+                                </tag>
+                                <tag>
+                                    <tag>tunnel_state</tag>
+                                    <value>down</value>
+                                </tag>
+                            </tags>
+                        </trigger_prototype>
+                    </trigger_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <name>{#DESCRIPTION} - {#TUNNEL} Traffic</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>F63100</color>
+                                    <item>
+                                        <host>OPNsense IPSec tunnels</host>
+                                        <key>ipsec.traffic[{#TUNNEL},&quot;bytesIn&quot;]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>2774A4</color>
+                                    <item>
+                                        <host>OPNsense IPSec tunnels</host>
+                                        <key>ipsec.traffic[{#TUNNEL},&quot;bytesOut&quot;]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <name>{#DESCRIPTION} status</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>1A7C11</color>
+                                    <item>
+                                        <host>OPNsense IPSec tunnels</host>
+                                        <key>ipsec.tunnel[{#TUNNEL}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+        </template>
+    </templates>
+</zabbix_export>
