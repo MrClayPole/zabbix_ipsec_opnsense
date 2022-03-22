@@ -4,10 +4,9 @@
 # Script to check if firewall is in high availability mode and if its backup or master
 #
 # Possible returns
-#   DISBALE: HA is disabled
+#   DISBALED: HA is disabled
 #   MASTER: HA is enable and this firewall is the MASTER
 #   BACKUP: HA is enabled and this firewall is the BACKUP
-
 
 # Init variables
 carp_state="UNKNOWN"
