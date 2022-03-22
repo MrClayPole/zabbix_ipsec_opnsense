@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>5.0</version>
-    <date>2022-03-22T13:46:55Z</date>
+    <date>2022-03-22T16:02:32Z</date>
     <groups>
         <group>
             <name>Firewalls</name>
@@ -28,9 +28,8 @@
                 <item>
                     <name>OPNsense Carp/High Available status</name>
                     <key>carp.status</key>
-                    <history>0</history>
                     <trends>0</trends>
-                    <value_type>CHAR</value_type>
+                    <value_type>TEXT</value_type>
                     <applications>
                         <application>
                             <name>OPNsense</name>
