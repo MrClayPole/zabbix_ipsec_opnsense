@@ -27,7 +27,7 @@ The template queries zabbix-ipsec.py for tunnels ids (conXXXX). After that, the 
 - Enabled Custom Configuration on Advanced Settins at System -> sudo
 - Create the follow user parameters at zabbix-agent config page on OPNsense (Service -> Zabbix-agent -> Advanced Options)
 ```
-UserParameter=ipsec.discover,/usr/local/bin/python2.7 /usr/local/bin/zabbix-ipsec.py
+UserParameter=ipsec.discover,/usr/local/bin/python3 /usr/local/bin/zabbix-ipsec.py
 UserParameter=ipsec.tunnel[*],/usr/local/bin/sudo /usr/local/bin/check_ipsec.sh $1
 UserParameter=ipsec.traffic[*],/usr/local/bin/sudo /usr/local/bin/check_ipsec_traffic.sh $1 $2
 UserParameter=carp.status,/usr/local/bin/check_carp_state.sh
