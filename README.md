@@ -1,12 +1,12 @@
-# Monitoring IPsec tunnels on PFSense using zabbix
+# Monitoring IPsec tunnels on OPNsense using zabbix
 
-This project was forked from https://github.com/alanwds/zabbix_ipsec_pfsense. Thanks to @alanwds by sharing 
+This project was forked from https://github.com/alanwds/zabbix_ipsec_OPNsense. Thanks to @alanwds by sharing 
 
 This template is used for monitoring IPSEC tunnels on OPNsense using zabbix.
 
 # Dependencies
 
-- Zabbix agent (you can install it from pfsense packages manager)
+- Zabbix agent (you can install it from OPNsense packages manager)
 - sudo (you can install it from OPNsense packages manager)
 - Zabbix Server >= 5.0
 - check_ipsec.sh
@@ -21,11 +21,11 @@ The template queries zabbix-ipsec.py for tunnels ids (conXXXX). After that, the 
 
 ### Installation
 
-- You have to put check_ipsec.sh, check_ipsec_traffic.sh, check_carp_state.sh and zabbix-ipsec.py on pfsense filesystem. (/usr/local/bin/ in this example)
+- You have to put check_ipsec.sh, check_ipsec_traffic.sh, check_carp_state.sh and zabbix-ipsec.py on OPNsense filesystem. (/usr/local/bin/ in this example)
 - Install sudo pakage at OPNsense packages manager
 - Copy file zabbix_sudoers under /usr/local/etc/sudoers.d
 - Enabled Custom Configuration on Advanced Settins at System -> sudo
-- Create the follow user parameters at zabbix-agent config page on pfsense (Service -> Zabbix-agent -> Advanced Options)
+- Create the follow user parameters at zabbix-agent config page on OPNsense (Service -> Zabbix-agent -> Advanced Options)
 ```
 UserParameter=ipsec.discover,/usr/local/bin/python2.7 /usr/local/bin/zabbix-ipsec.py
 UserParameter=ipsec.tunnel[*],/usr/local/bin/sudo /usr/local/bin/check_ipsec.sh $1
@@ -39,5 +39,5 @@ chmod +x /usr/local/bin/check_ipsec.sh
 chmod +x /usr/local/bin/check_ipsec_traffic.sh
 chmod +x /usr/local/bin/check_carp_state.sh
 ``` 
-- Import the template OPNsense IPSec template.xml on zabbix and attach to pfsense hosts
+- Import the template OPNsense IPSec template.xml on zabbix and attach to OPNsense hosts
 - Go get a beer
