@@ -4,7 +4,7 @@
 # Script to check if firewall is in high availability mode and if its backup or master
 #
 # Possible returns
-#   DISBALED: HA is disabled
+#   DISABLED: HA is disabled
 #   MASTER: HA is enable and this firewall is the MASTER
 #   BACKUP: HA is enabled and this firewall is the BACKUP
 
