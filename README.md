@@ -24,7 +24,7 @@ The template queries zabbix-ipsec.py for tunnels ids (conXXXX). After that, the 
 - You have to put check_ipsec.sh, check_ipsec_traffic.sh, check_carp_state.sh and zabbix-ipsec.py on OPNsense filesystem. (/usr/local/bin/ in this example)
 - Install sudo pakage at OPNsense packages manager
 - Copy file zabbix_sudoers under /usr/local/etc/sudoers.d
-- Enabled Custom Configuration on Advanced Settins at System -> sudo
+- At the console "touch /usr/local/etc/strongswan.opnsense.d/dummy.conf" (This prevents an error when running ipsec commands)
 - Create the follow user parameters at zabbix-agent config page on OPNsense (Service -> Zabbix-agent -> Advanced Options)
 ```
 UserParameter=ipsec.discover,/usr/local/bin/python3 /usr/local/bin/zabbix-ipsec.py
