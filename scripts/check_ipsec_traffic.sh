@@ -1,5 +1,5 @@
 #!/bin/sh
-#Expect conxxxxx [bytesIn,bytesOut,pktsIn,pktsOut]
+#Expect conxxxxx [bytesIn,bytesOut]
 # ------------------------------------------
 IPSECBIN="/usr/local/sbin/ipsec"
 IPSECCMD=$IPSECBIN
@@ -23,16 +23,16 @@ fi
 
 ipsec_get_bytes()
 {
-  for ipsec in $(ipsec statusall | grep con1\{ | grep bytes_ | tr -su ' ' '\n' | tail -n +2)
+  for ipsec in $(ipsec statusall | grep $1\{ | grep bytes_ | tr -su ' ' '\n' | tail -n +2)
   do
-    if [ "$ipsec" == "$1" ] | [ "$ipsec" == "$1," ]; then
+    if [ "$ipsec" == "$2" ] || [ "$ipsec" == "$2," ]; then
+      echo $ipsec_prev
       break
     else
       ipsec_prev=$ipsec
     fi
   done
 
-  echo $ipsec_prev
 }
 
 getTraffic() {
@@ -54,14 +54,10 @@ getTraffic() {
                         if [ $? -eq 0 ]; then
                                 case $METRIC in
                                         bytesIn)
-                                                ipsec_get_bytes "bytes_i"
-#                                               bytesIn=$(ipsec statusall | grep -e "$CONN{" | grep bytes_i | awk -F" " {'print $3'} | tail -1)
-#                                               echo $bytesIn
+                                                ipsec_get_bytes $CONN "bytes_i"
                                                 ;;
                                         bytesOut)
-                                                ipsec_get_bytes "bytes_o"
-#                                               bytesOut=$(ipsec statusall | grep -e "$CONN{" | grep bytes_o | awk -F" " {'print $9'} | tail -1)
-#                                               echo $bytesOut
+                                                ipsec_get_bytes $CONN "bytes_o"
                                                 ;;
 
                                         *)
