@@ -1,2 +1,2 @@
 Defaults:zabbix !requiretty
-zabbix ALL = (root) NOPASSWD: /usr/local/bin/ipsec-discovery.sh,/usr/local/bin/check_ipsec_traffic.sh,/usr/local/bin/check_ipsec.sh,
+zabbix ALL = (root) NOPASSWD: /usr/local/bin/ipsec-discovery.sh,/usr/local/bin/check_ipsec_traffic.sh,/usr/local/bin/check_ipsec.sh
