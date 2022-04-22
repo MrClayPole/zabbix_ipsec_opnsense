@@ -20,7 +20,7 @@ do
   IKEID=$(echo $IKEID_XML | sed -e 's/<[^>]*>//g')
 
   XMLQUERY="//opnsense/ipsec/phase1[ikeid=$IKEID]/descr"
-  DESCRIPTION=$(xmllint --xpath "$XMLQUERY" $OPNSENSE_CONF | sed -e 's/<[^>]*>//g')
+  DESCRIPTION=$(xmllint --nowarning --xpath "$XMLQUERY" $OPNSENSE_CONF | sed -e 's/<[^>]*>//g')
 
   REMOTE_PHASE1_IP=$(ipsec statusall | grep con$IKEID | grep -v "{" | grep -v "]:" | grep "remote:" | cut -d "[" -f2 | cut -d "]" -f1)
 
